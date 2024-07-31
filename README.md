@@ -4,7 +4,11 @@
 
 ## Các câu lệnh để build và chạy dự án
 
-- Câu lệnh chạy dự án:
+- Câu lệnh cài đặt các thư viện cần thiết:
+
+### `npm install`
+
+- Sau khi cài đặt các thư viện thành côgn bằng câu lệnh `npm install`, chạy câu lệnh sau để khởi động dự án:
 
 ### `npm start`
 
