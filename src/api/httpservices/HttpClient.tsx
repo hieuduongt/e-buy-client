@@ -7,9 +7,10 @@ export class HttpClient implements IHttpClient {
     
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "https://localhost:7299" : "https://server.ebuy-shop.online",
+        
+            baseURL: !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "https://localhost:7299/" : "https://server.ebuy-shop.online",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", 
             }
         });
     }
