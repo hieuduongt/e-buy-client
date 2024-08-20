@@ -1,119 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import { CategoryServices } from '../api/services/category/CategoryServices';
-import { CategoryDto } from '../models/CategoryDto';
+import React, { ReactNode, useReducer } from 'react';
+import { Col, Form, Input, Row, MenuProps } from 'antd';
+import { Content } from 'antd/es/layout/layout';
+import '../index.css'
+import { GiftOutlined, PropertySafetyOutlined, SearchOutlined, ShopOutlined, ShoppingCartOutlined, WhatsAppOutlined } from '@ant-design/icons';
 
-const { Header, Content, Sider } = Layout;
-const categoryApi = new CategoryServices();
+type MainLayoutProps = {
+    children: React.ReactNode;
+}
 
-const items1: MenuProps['items'] = ['1', '2', '3'].map((key, index) => ({
-    key,
-    label: (
-        <a href={`${index % 2 === 0 ? "/app" : "/"}`} >
-            Navigation Four - Link
-        </a>
-    ),
-}));
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+    const [form] = Form.useForm()
+    const Search = () => {
 
-const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-    (icon, index) => {
-        const key = String(index + 1);
-
-        return {
-            key: `sub${key}`,
-            icon: React.createElement(icon),
-            label: `subnav ${key}`,
-
-            children: new Array(4).fill(null).map((_, j) => {
-                const subKey = index * 4 + j + 1;
-                return {
-                    key: subKey,
-                    label: `option${subKey}`,
-                };
-            }),
-        };
-    },
-);
-
-type Props = {
-    children?: React.ReactNode
-};
-
-const MainLayout: React.FC<Props> = ({ children }) => {
-    const [currentPath, setCurrentPath] = useState<string>("");
-
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
-
-    useEffect(() => {
-        setCurrentPath(window.location.pathname);
-    }, [window.location.pathname]);
-
-    const [categories, setCategories] = useState<Array<CategoryDto>>();
-
-    const getAllCategories = async (): Promise<void> => {
-        const categorieRes = await categoryApi.getAll();
-        if (categorieRes.isSuccess && categorieRes.result && categorieRes.result.items) {
-            setCategories(categorieRes.result.items || []);
-        } else {
-            console.log(categorieRes);
-        }
     }
-
-    useEffect(() => {
-        getAllCategories();
-    }, []);
-
     return (
-        <Layout>
-            <Header style={{ display: 'flex', alignItems: 'center', backgroundColor: "white", padding: "0px 20px" }}>
-                <div className="app-logo">
-                    <img src="ebuy-logo.png" alt="logo" />
-                </div>
-                <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={['2']}
-                    items={items1}
-                    style={{ flex: 1, minWidth: 0 }}
-                />
-            </Header>
-            <Layout>
-                {currentPath === "/" ? <></> :
-                    <Sider width={200} style={{ background: colorBgContainer }}>
-                        <Menu
-                            mode="inline"
-                            defaultSelectedKeys={['1']}
-                            defaultOpenKeys={['sub1']}
-                            style={{ height: '100%', borderRight: 0 }}
-                            items={items2}
-                        />
-                    </Sider>
-                }
-
-                <Layout style={{ padding: '0 24px 24px' }}>
-                    <Breadcrumb style={{ margin: '16px 0' }}>
-                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                        <Breadcrumb.Item>List</Breadcrumb.Item>
-                        <Breadcrumb.Item>App</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <Content
-                        style={{
-                            padding: 24,
-                            margin: 0,
-                            minHeight: 280,
-                            background: colorBgContainer,
-                            borderRadius: borderRadiusLG,
-                        }}
+        <div>
+            <div style={{ display: 'block', alignItems: 'center', backgroundColor: "white", padding: "0px 20px" }}>
+                <Row gutter={16} align="middle">
+                    <Col span={10}>
+                        <div className="nav-link">
+                            <a href="#">
+                                <PropertySafetyOutlined style={{ fontSize: "14px", marginRight: "3px", color: "rgb(96 90 90)" }} />
+                                Daily Deals
+                            </a>
+                            <a href="#" style={{
+                                padding: "0px 3px"
+                            }}>
+                                <ShopOutlined style={{ fontSize: "14px", marginRight: "3px", color: "rgb(96 90 90)" }} />
+                                Brand Outlet
+                            </a>
+                            <a href="#">
+                                <GiftOutlined style={{ fontSize: "14px", marginRight: "3px", color: "rgb(96 90 90)" }} />
+                                Gift divs
+                            </a>
+                            <a href="#">
+                                <WhatsAppOutlined style={{ fontSize: "14px", marginRight: "3px", color: "rgb(96 90 90)" }} />
+                                Help & Contact
+                            </a>
+                        </div>
+                    </Col>
+                    <Col span={6}>
+                    </Col>
+                    <Col span={8} style={{ textAlign: 'right' }}>
+                        <div className="action-item">
+                            <a href="#">Sell</a>
+                            <a href='#'>About Us</a>
+                            <a href="#">Login</a>
+                            <a href="#">Register</a>
+                        </div>
+                    </Col>
+                </Row>
+                <div className='logo-search' style={{ display: "flex", marginLeft: "94px" }}>
+                    <div>
+                        <a href="/" >
+                            <img src={`${process.env.PUBLIC_URL}/ebuy-logo.png`} alt="logo" style={{width: "99px"}}/>
+                        </a>
+                    </div>
+                    <Form
+                        form={form}
+                        style={{ display: "flex", width: "85%" }}
                     >
-                        {children}
-                    </Content>
-                </Layout>
-            </Layout>
-        </Layout>
+                        <Form.Item
+                            name='search'
+                            style={{ width: "100%" }}
+                        >
+                            <Input style={{
+                                height: "51px",
+                                position: "relative",
+                                top: "44px",
+                                left: "20px",
+                                width: "100%"
+                            }} />
+                        </Form.Item>
+                        <SearchOutlined
+                            style={{
+                                position: "relative",
+                                fontSize: "30px",
+                                top: " 51px",
+                                right: " 27px",
+                                borderLeft: "1px solid #c2baba",
+                                height: "25px",
+                                padding: "8px",
+                                color: "#646060"
+                            }}
+                            onClick={() => Search()} />
+                    </Form>
+                    <div className='cart'>
+                        <ShoppingCartOutlined
+                            style={{
+                                position: "relative",
+                                fontSize: "36px",
+                                top: "57px",
+                                color: "#4b4949"
+                            }}
+                        />
+                    </div>
+                </div>
+            </div>
+            <Content className="content">
+                {children}
+            </Content>
+        </div>
     );
 };
 

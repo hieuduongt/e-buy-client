@@ -10,8 +10,12 @@ export class CategoryServices implements ICategoryServies {
         this.httpClient = new HttpClient();
     }
 
-    async getAll(search?: string, page?: number, pageSize?: number): Promise<EBuyResponse<Paginated<CategoryDto>>> {
-        const res = await this.httpClient.get<Paginated<CategoryDto>>(`/api/category?search=${search||""}&page=${page||1}&pageSize=${pageSize||20}`);
+    async getAll(search?:string, page?: number, pageSize?: number): Promise<EBuyResponse<Paginated<CategoryDto>>> {
+        if(search === undefined){
+            const res = await this.httpClient.get<Paginated<CategoryDto>>(`/api/category?page=${page||1}&pageSize=${pageSize||20}`);
+            return res;
+        }
+        const res = await this.httpClient.get<Paginated<CategoryDto>>(`/api/category?search=${search}&page=${page||1}&pageSize=${pageSize||20}`);
         return res;
     }
 
